@@ -14,7 +14,7 @@ import io.reactivex.Single
 interface NoteDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(note: Note)
+    fun insert(note: Note): Completable
 
     @Query("""Select * from note""")
     fun getNotes(): Flowable<List<Note>>

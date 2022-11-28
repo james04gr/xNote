@@ -42,7 +42,7 @@ class NoteEditViewModel @Inject constructor(
 
     init {
         savedStateHandle.get<String>("noteId")?.let {
-            if (it != "0") {
+            if (it != "-1") {
                 currentNoteId = it.toLong()
                 getSingleNote(it.toLong())
             }
@@ -60,7 +60,7 @@ class NoteEditViewModel @Inject constructor(
             is EditNoteEvent.SaveNote -> {
                 val newNote = if (currentNoteId == null) {
                     Note(
-                        id = -1,
+                        id = 0,
                         title = _noteTitle.value,
                         description = _noteDescription.value,
                         color = _noteColor.value,
@@ -76,10 +76,13 @@ class NoteEditViewModel @Inject constructor(
                     )
                 }
 
-                viewModelScope.launch(Dispatchers.IO) {
-                    insertNoteUseCase(newNote!!)
-                    _event.emit(UiEvent.SaveNote)
-                }
+                insertNoteUseCase(newNote!!)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe {
+                        viewModelScope.launch(Dispatchers.IO) {
+                            _event.emit(UiEvent.SaveNote)
+                        }
+                    }
             }
         }
     }

@@ -33,14 +33,14 @@ fun NoteListView(
                         navController.navigate(Screen.NoteEditScreen.route + "/${note.id}")
                     },
                     onDeleteClicked = {
-
+                        viewModel.deleteNote(it)
                     }
                 )
             }
         }
         FloatingActionButton(
             onClick = {
-                navController.navigate(Screen.NoteEditScreen.route + "/0")
+                navController.navigate(Screen.NoteEditScreen.route + "/-1")
             },
             modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp)
         ) {

@@ -12,7 +12,7 @@ class NoteRepositoryImpl @Inject constructor(
     private val xNoteDatabase: XNoteDatabase
 ): NoteRepository {
 
-    override fun insert(note: Note) =
+    override fun insert(note: Note): Completable =
         xNoteDatabase.noteDao().insert(note)
 
     override fun getNotes(): Flowable<List<Note>> =

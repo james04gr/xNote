@@ -7,7 +7,7 @@ import io.reactivex.Single
 
 interface NoteRepository {
 
-    fun insert(note: Note)
+    fun insert(note: Note): Completable
 
     fun getNotes(): Flowable<List<Note>>
 

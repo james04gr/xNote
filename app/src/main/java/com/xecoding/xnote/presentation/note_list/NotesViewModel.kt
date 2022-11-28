@@ -3,6 +3,7 @@ package com.xecoding.xnote.presentation.note_list
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.xecoding.xnote.domain.model.Note
+import com.xecoding.xnote.domain.use_case.DeleteNoteUseCase
 import com.xecoding.xnote.domain.use_case.GetNotesUseCase
 import com.xecoding.xnote.domain.use_case.GetSingleNoteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,10 +15,10 @@ import javax.inject.Inject
 @HiltViewModel
 class NotesViewModel @Inject constructor(
     private val getNotesUseCase: GetNotesUseCase,
-    private val getSingleNoteUseCase: GetSingleNoteUseCase
+    private val deleteNoteUseCase: DeleteNoteUseCase
 ) : ViewModel() {
 
-    val compositeDisposable = CompositeDisposable()
+    private val compositeDisposable = CompositeDisposable()
 
     private val _notes = mutableStateOf<List<Note>>(emptyList())
     val notes = _notes
@@ -26,7 +27,7 @@ class NotesViewModel @Inject constructor(
         getNotes()
     }
 
-    fun getNotes() = getNotesUseCase()
+    private fun getNotes() = getNotesUseCase()
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe({
@@ -38,6 +39,10 @@ class NotesViewModel @Inject constructor(
         }).let {
             compositeDisposable.add(it)
         }
+
+    fun deleteNote(note: Note) = deleteNoteUseCase(note)
+        .subscribeOn(Schedulers.io())
+        .subscribe()
 
     override fun onCleared() {
         compositeDisposable.dispose()

@@ -27,7 +27,7 @@ import kotlin.random.Random
 fun NoteListItem(
     note: Note,
     onItemClicked: (Note) -> Unit,
-    onDeleteClicked: () -> Unit
+    onDeleteClicked: (Note) -> Unit
 ) {
     val cornerRadius: Dp = 20.dp
     val clipCorner: Dp = 10.dp
@@ -84,7 +84,7 @@ fun NoteListItem(
         IconButton(
             modifier = Modifier.align(Alignment.BottomEnd),
             onClick = {
-                onDeleteClicked()
+                onDeleteClicked(note)
             }
         ) {
             Icon(
